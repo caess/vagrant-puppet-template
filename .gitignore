@@ -1,0 +1,5 @@
+*.tmproj
+*.box
+.vagrant
+Gemfile.lock
+.vagrant_last_provisioned
