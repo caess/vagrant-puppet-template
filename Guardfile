@@ -1,5 +1,4 @@
 require 'guard/cucumber'
-require "vagrant"
 require "fileutils"
 require 'pp'
 
@@ -22,26 +21,18 @@ module ::Guard
 end
 
 def setup_vagrant
-  @env = Vagrant::Environment.new(:ui_class => Vagrant::UI::Colored)
-  @env.vms.each do |name, vm|
-    if vm.state == :running
-      vm.provision
-    else
-      vm.up
-    end
-  end
+  success = system('vagrant up')
+  abort "Unable to set up VMs" unless success.true?
+  
+  success = system('vagrant provision')
+  abort "Unable to run vagrant provision" unless success.true?
 end
 
 # This block simply calls vagrant provision via a shell
 # And shows the output
 def vagrant_provision
-  if @env
-    puts "Running vagrant provision."
-    @env.cli("provision") && FileUtils.touch('.vagrant_last_provisioned')
-  else
-    puts "Setting up vagrant environment."
-    setup_vagrant && FileUtils.touch('.vagrant_last_provisioned')
-  end
+  setup_vagrant
+  FileUtils.touch('.vagrant_last_provisioned')
 end
 
 # So determine if all tests (both rspec and cucumber have been passed)
