@@ -1,16 +1,22 @@
 source "http://rubygems.org"
 
-# To get vagrant and virtualbox going
+# Vagrant tools
 gem "veewee",">= 0.3", :github => 'jedi4ever/veewee'
 gem "sahara", '>=0.0.14', :github => 'ryuzee/sahara'
 
-# Test steps section
-gem "rspec-puppet"
+# Puppet tools
+gem "puppet"
 gem "puppet-lint"
-gem "rspec"
+gem "puppet-module"
+gem "puppetlabs_spec_helper"
 
-# Guard gem itself
-# see - https://github.com/guard/guard
+# Testing tools
+gem "aruba"
+gem "cucumber", ">=1.0.0"
+gem "rspec"
+gem "rspec-puppet"
+
+# Guard
 gem 'guard'
 gem 'rb-inotify', :require => false
 gem 'rb-fsevent', :require => false
@@ -20,12 +26,3 @@ gem 'growl'
 # Guard helpers
 gem "guard-rspec"
 gem "guard-cucumber"
-
-# Puppet section
-gem "puppet-module"
-gem "puppet"
-gem "puppetlabs_spec_helper"
-
-# For doing some vagrant testing
-gem "aruba"
-gem "cucumber", ">=1.0.0"
