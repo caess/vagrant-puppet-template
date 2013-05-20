@@ -1,9 +1,8 @@
 source "http://rubygems.org"
 
 # To get vagrant and virtualbox going
-#gem "vagrant",'~> 0.8'
-gem "veewee",">= 0.3"
-gem "sahara", '>=0.0.13'
+gem "veewee",">= 0.3", :github => 'jedi4ever/veewee'
+gem "sahara", '>=0.0.14', :github => 'ryuzee/sahara'
 
 # Test steps section
 gem "rspec-puppet"
