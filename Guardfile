@@ -22,10 +22,10 @@ end
 
 def setup_vagrant
   success = system('vagrant up')
-  abort "Unable to set up VMs" unless success.true?
-  
+  abort "Unable to set up VMs" unless success
+
   success = system('vagrant provision')
-  abort "Unable to run vagrant provision" unless success.true?
+  abort "Unable to run vagrant provision" unless success
 end
 
 # This block simply calls vagrant provision via a shell
@@ -96,7 +96,7 @@ group :vm_tests do
 
     # Feature files are monitored as well
     watch(%r{^features/[^.]*.feature})
-    
+
     # Watch to see if the VM(s) have been reprovisioned
     watch('.vagrant_last_provisioned') { "features" }
   end
