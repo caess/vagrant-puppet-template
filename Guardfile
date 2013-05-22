@@ -54,7 +54,7 @@ group :puppet_tests do
   # Run rspec-puppet tests
   # --format documentation : for better output
   # :spec_paths to pass the correct path to look for features
-  guard :rspec, :version => 2, :cli => "--color --format documentation", :spec_paths => ["puppet-repo"]  do
+  guard :rspec, :cli => "--color --format documentation", :spec_paths => ["puppet-repo"]  do
     # Match any .pp file (but be carefull not include and dot-temporary files)
     watch(%r{^puppet-repo/.*/[^.]*\.pp$}) { "puppet-repo" }
     # Match any .rb file (but be carefull not include and dot-temporary files)
