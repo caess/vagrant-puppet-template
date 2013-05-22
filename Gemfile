@@ -18,9 +18,7 @@ gem "rspec-puppet"
 
 # Guard
 gem 'guard'
-gem 'rb-inotify', :require => false
-gem 'rb-fsevent', :require => false
-gem 'rb-fchange', :require => false
+gem 'listen', '>=1.0.0'
 gem 'growl'
 
 # Guard helpers
