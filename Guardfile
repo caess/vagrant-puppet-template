@@ -1,9 +1,5 @@
-require 'guard/cucumber'
 require "fileutils"
 require 'pp'
-
-class ::Guard::VmCucumber < ::Guard::Cucumber
-end
 
 # Actual guard section
 group :puppet_tests, :halt_on_fail => true do
@@ -68,7 +64,7 @@ end
 
 group :vm_tests do
   # Run cucumber tests on the VM(s)
-  guard :vm_cucumber, :cli => "-s --strict --format progress" do
+  guard :cucumber, :cli => "-s --strict --format progress" do
     # Match any .rb file (but be careful not include and dot-temporary files)
     watch(%r{^features/[^.]*\.rb$}) { "features" }
 
