@@ -5,36 +5,8 @@ require 'pp'
 class ::Guard::VmCucumber < ::Guard::Cucumber
 end
 
-def setup_vagrant
-  success = system('vagrant up')
-  abort "Unable to set up VMs" unless success
-
-  success = system('vagrant provision')
-  abort "Unable to run vagrant provision" unless success
-end
-
-# This block simply calls vagrant provision via a shell
-# And shows the output
-def vagrant_provision
-  setup_vagrant
-  FileUtils.touch('.vagrant_last_provisioned')
-end
-
-# So determine if all tests (both rspec and cucumber have been passed)
-# This is used to only invoke the vagrant_provision if all test show green
-def all_tests_pass
-  cucumber_guard = ::Guard.guards({ :name => 'cucumber', :group => 'puppet_tests'}).first
-  cucumber_passed = cucumber_guard.instance_variable_get("@failed_paths").empty?
-  rspec_guard = ::Guard.guards({ :name => 'rspec', :group => 'puppet_tests'}).first
-  rspec_passed = rspec_guard.instance_variable_get("@failed_paths").empty?
-  puts "RSpec %s" % [rspec_passed ? "passed" : "failed"]
-  puts "Cucumber %s" % [cucumber_passed ? "passed" : "failed"]
-  return rspec_passed && cucumber_passed
-end
-
-
 # Actual guard section
-group :puppet_tests do
+group :puppet_tests, :halt_on_fail => true do
 
   # Run rspec-puppet tests
   # --format documentation : for better output
@@ -62,13 +34,34 @@ group :puppet_tests do
 
     # Feature files are monitored as well
     watch(%r{^puppet-repo/features/[^.]*.feature})
+  end
 
-    # This is only invoked on changes, not at initial startup
-    callback(:start_end) do
-      vagrant_provision if all_tests_pass
+  guard :shell, :all_on_start => true do
+    watch(%r{^Vagrantfile$}) do
+      success = system('vagrant reload')
+      if success
+        n 'VM(s) loaded', 'Vagrant', :success
+        'VM(s) loaded'
+      else
+        n 'VM(s) failed to load', 'Vagrant', :failed
+        'VM(s) failed to load'
+      end
     end
-    callback(:run_on_changes_end) do
-      vagrant_provision if all_tests_pass
+  end
+
+  guard :shell do
+    watch(%r{^puppet-repo/(manifests|modules)(/[^./][^/]*)*/[^./][^/]*$}) do
+      msg = ''
+      success = system('vagrant provision')
+      if success
+        FileUtils.touch('.vagrant_last_provisioned')
+
+        n 'VM(s) provisioned', 'Vagrant', :success
+        'VM(s) provisioned'
+      else
+        n 'VM(s) failed provisioning', 'Vagrant', :failed
+        'VM(s) failed provisioning'
+      end
     end
   end
 end
