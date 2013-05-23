@@ -5,21 +5,6 @@ require 'pp'
 class ::Guard::VmCucumber < ::Guard::Cucumber
 end
 
-# Monkey patching the Inspector class
-# By default it checks if it starts with /feature/
-# We tell it that whatever we pass is valid
-module ::Guard
-  class Cucumber
-    module Inspector
-      class << self
-        def cucumber_folder?(path)
-          return true
-        end
-      end
-    end
-  end
-end
-
 def setup_vagrant
   success = system('vagrant up')
   abort "Unable to set up VMs" unless success

@@ -23,7 +23,7 @@ gem 'growl'
 
 # Guard helpers
 gem "guard-rspec"
-gem "guard-cucumber"
+gem "guard-cucumber", '>=1.2.1'
 
 # Provide proper readline support on OS X, required for Guard
 # You can omit this if you are not using OS X or you are not
