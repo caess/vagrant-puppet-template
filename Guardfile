@@ -1,9 +1,7 @@
 require "fileutils"
 require 'pp'
 
-# Actual guard section
-group :puppet_tests, :halt_on_fail => true do
-
+group :puppet, :halt_on_fail => true do
   # Run rspec-puppet tests
   # --format documentation : for better output
   # :spec_paths to pass the correct path to look for features
@@ -62,7 +60,7 @@ group :puppet_tests, :halt_on_fail => true do
   end
 end
 
-group :vm_tests do
+group :vagrant do
   # Run cucumber tests on the VM(s)
   guard :cucumber, :cli => "-s --strict --format progress" do
     # Match any .rb file (but be careful not include and dot-temporary files)
