@@ -3,4 +3,5 @@
 .vagrant
 Gemfile.lock
 .vagrant_last_provisioned
+.vagrant_needs_provision
 tmp/
