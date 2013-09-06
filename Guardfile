@@ -1,5 +1,6 @@
 require "fileutils"
-require 'pp'
+
+vms_to_sandbox = %w{}
 
 group :puppet, :halt_on_fail => true do
   # Enumerate the Puppet modules and set up rspec guards for them.
@@ -66,13 +67,44 @@ group :puppet, :halt_on_fail => true do
   # Reload the VMs if Vagrantfile is changed.
   guard :shell, :all_on_start => true do
     watch(%r{^Vagrantfile$}) do
-      success = system('vagrant reload')
-      if success
-        n 'VM(s) loaded', 'Vagrant', :success
+      failures = []
+
+      IO.popen('vagrant status').each do |line|
+        if line =~ /^(\S+)\s+(not created|poweroff|running)/
+          vm    = $1
+          state = $2
+
+          case state
+          when 'not created', 'poweroff'
+            command = 'up'
+            text = 'load'
+          when 'running'
+            command = 'reload'
+            text = 'reload'
+          end
+
+          success = system("vagrant #{command} #{vm}")
+          failures << "#{vm} load" if not success
+        end
+      end
+
+      # Enabling sandboxing for sandboxed VMs.
+      IO.open('vagrant sandbox status').each do |line|
+        if line =~ /\[([^\]]+)\] Sandbox mode is off$/
+          vm = $1
+          if vms_to_sandbox.include?(vm)
+            success = system("vagrant sandbox on #{vm}")
+            failures << "#{vm} sandbox" if not sucess
+          end
+        end
+      end
+
+      if failures.empty?
+        n 'VM(s) loaded', 'vagrant', :success
         'VM(s) loaded'
       else
-        n 'VM(s) failed to load', 'Vagrant', :failed
-        'VM(s) failed to load'
+        n 'VM(s) errors: ' + failures.join(', '), 'vagrant', :failed
+        'VM(s) errors: ' + failures.join(', ')
       end
     end
   end
@@ -94,6 +126,9 @@ group :puppet, :halt_on_fail => true do
       msg = ''
       success = system('vagrant provision')
       if success
+        # We need to commit the sandboxed VMs.
+        system("vagrant sandbox commit")
+
         FileUtils.touch('.vagrant_last_provisioned')
 
         n 'VM(s) provisioned', 'Vagrant', :success

@@ -1,6 +1,11 @@
 This is my template for Vagrant-based projects with Puppet.  This is based on Patrick Debois' blog post [Test Driven Infrastructure with Vagrant, Puppet, and Guard](http://www.jedi.be/blog/2011/12/13/testdriven-infrastructure-with-vagrant-puppet-guard/) and the associated [github repo](http://github.com/jedi4ever/vagrant-guard-demo).
 
 ### To use
+#### Prerequisites
+You will need [Vagrant](http://www.vagrantup.com) installed.  You will also need the [sahara](https://github.com/jedi4ever/sahara) plugin for Vagrant to enable sandboxing.  To install sahara, run this command:
+
+        vagrant plugin install sahara
+
 #### Setting up the repository
 1.  Create a new repository:
 
