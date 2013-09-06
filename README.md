@@ -46,4 +46,4 @@ This is my template for Vagrant-based projects with Puppet.  This is based on Pa
 6. Apply the patches:
 
         git apply <patch1> <patch2> ...
-7. Commit with the desired commit message.
+7. Add the changed files.  Commit with the desired commit message.
