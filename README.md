@@ -2,7 +2,7 @@ This is my template for Vagrant-based projects with Puppet.  This is based on Pa
 
 ### To use
 #### Setting up the repository
-1.  Create an empty repository:
+1.  Create a new repository:
 
         git init
         touch .gitignore
@@ -10,20 +10,40 @@ This is my template for Vagrant-based projects with Puppet.  This is based on Pa
         git commit -m "Initial commit."
 2. Create a remote branch for the template:
 
-        git remote add template/master https://github.com/caess/vagrant-puppet-template.git
+        git remote add template https://github.com/caess/vagrant-puppet-template.git
 3. Fetch the content from this repo:
 
         git fetch template
-4. Merge in the template:
+4. Create a tracking branch:
 
-        git merge --squash template/master
-5. Commit with the desired commit message.
+        git checkout --track -b template template/master
+5. Go back to the master branch:
+
+        git checkout master
+6. Merge in the template:
+
+        git merge --squash template
+7. Commit with the desired commit message.
 
 #### Incorporating template updates
+(Note that this process is still under review.)
+
 1. Update the remote branch:
 
         git fetch template
-2. Merge in the template:
+2. Check out the template branch:
 
-        git merge --squash template/master
-3. Commit with the desired commit message. 
+        git checkout template
+3. Generate a patch:
+
+        ???
+4. Merge the changes:
+
+        git merge
+5. Check out the master branch:
+
+        git checkout master
+6. Apply the patch:
+
+        git apply <patch>
+7. Commit with the desired commit message.
