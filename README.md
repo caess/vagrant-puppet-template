@@ -34,16 +34,16 @@ This is my template for Vagrant-based projects with Puppet.  This is based on Pa
 2. Check out the template branch:
 
         git checkout template
-3. Generate a patch:
+3. Update the branch:
 
-        ???
-4. Merge the changes:
+        git pull
+4. Using the output from git pull, generate a patch:
 
-        git merge
+        git format-patch oldrev..newrev
 5. Check out the master branch:
 
         git checkout master
-6. Apply the patch:
+6. Apply the patches:
 
-        git apply <patch>
+        git apply <patch1> <patch2> ...
 7. Commit with the desired commit message.
