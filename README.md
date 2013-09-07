@@ -1,12 +1,17 @@
 This is my template for Vagrant-based projects with Puppet.  This is based on Patrick Debois' blog post [Test Driven Infrastructure with Vagrant, Puppet, and Guard](http://www.jedi.be/blog/2011/12/13/testdriven-infrastructure-with-vagrant-puppet-guard/) and the associated [github repo](http://github.com/jedi4ever/vagrant-guard-demo).
 
-### To use
-#### Prerequisites
+### Configuration settings
+There are currently two configuration setings set in `Guardfile`:
+
+* `module_prefix`: This is the author prefix for modules created using `puppet module`.  This limits running the RSpec guards to only those modules being developed.
+* `vms_to_sandbox`: This is an array of VMs that should always be sandboxed.  These are typically VMs that are used for testing other VMs.
+
+### Prerequisites
 You will need [Vagrant](http://www.vagrantup.com) installed.  You will also need the [sahara](https://github.com/jedi4ever/sahara) plugin for Vagrant to enable sandboxing.  To install sahara, run this command:
 
         vagrant plugin install sahara
 
-#### Setting up the repository
+### Setting up the repository
 1.  Create a new repository:
 
         git init
@@ -30,7 +35,7 @@ You will need [Vagrant](http://www.vagrantup.com) installed.  You will also need
         git merge --squash template
 7. Commit with the desired commit message.
 
-#### Incorporating template updates
+### Incorporating template updates
 (Note that this process is still under review.)
 
 1. Update the remote branch:
