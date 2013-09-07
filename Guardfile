@@ -17,7 +17,7 @@ group :puppet, :halt_on_fail => true do
     #
     # Set X_MODULE_PATH so configure_rspec_puppet.rb can add the path to
     # $LOAD_PATH for custom facts
-    guard :rspec, :cli => "-I #{spec_path} -I #{mod_path}/lib --require spec/helpers/configure_rspec_puppet.rb --color --format documentation",
+    guard :rspec, :cli => "-I #{spec_path} -I #{mod_path}/lib --require #{Dir.pwd}/spec/helpers/configure_rspec_puppet.rb --color --format documentation",
         :env => {'X_MODULE_PATH' => mod_path}, :spec_paths => [spec_path],
         :all_on_start => true do
       # Watch Puppet manifest files, skipping temporary dot-files
