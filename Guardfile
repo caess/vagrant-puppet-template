@@ -1,10 +1,11 @@
 require "fileutils"
 
+module_prefix = 'caess'
 vms_to_sandbox = %w{}
 
 group :puppet, :halt_on_fail => true do
   # Enumerate the Puppet modules and set up rspec guards for them.
-  Dir.glob('puppet-repo/modules/*/spec/').each do |spec_path|
+  Dir.glob("puppet-repo/modules/#{module_prefix}-*/spec/").each do |spec_path|
     spec_path =~ %r{^(puppet-repo/modules/[^/]+)/spec}
     mod_path = $1
 
