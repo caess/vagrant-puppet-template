@@ -3,7 +3,7 @@ This is my template for Vagrant-based projects with Puppet.  This is based on Pa
 ### Configuration settings
 There are currently two configuration setings set in `config.yml`:
 
-* `module_prefix`: This is the author prefix for modules created using `puppet module`.  This limits running the Puppet RSpec guards to only those modules being developed.
+* `module_prefix`: This is the author prefix for modules created using `puppet module`.  This limits running the Puppet RSpec and Cucumber guards to only those modules being developed.
 * `vms_to_sandbox`: This is an array of VMs that should always be sandboxed.  These are typically VMs that are used for testing other VMs.
 
 ### Prerequisites
