@@ -60,6 +60,9 @@ group :puppet, :halt_on_fail => true do
     # Watch the cucumber feature files, skipping temporary dot-files
     watch(%r{^puppet-repo/features/[^.]*.feature$})
 
+    # Watch step definiton and support files, skipping temporary dot-files
+    watch(%r{^puppet-repo/features/[^/]+/[^.]*.rb$}) {'puppet-repo/features'}
+
     # Watch Puppet manifest files, skipping temporary dot-files
     watch(%r{^puppet-repo/[^.]*\.pp$}) {"puppet-repo/features"}
 
