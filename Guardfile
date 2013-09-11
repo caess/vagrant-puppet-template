@@ -135,19 +135,48 @@ group :puppet, :halt_on_fail => true do
   # let guard know to run the cucumber features for the system.
   guard :shell do
     watch(%r{^.vagrant_needs_provision$}) do
-      msg = ''
+      failures = []
+
+      # Start any VMs that aren't running
+      IO.popen('vagrant status').each do |line|
+        if line =~ /^(\S+)\s+(?:not created|poweroff)/
+          vm    = $1
+
+          success = system("vagrant up #{vm}")
+          failures << "#{vm} load" if not success
+        end
+      end
+
+      # Enabling sandboxing for sandboxed VMs that don't have it enabled.
+      IO.popen('vagrant sandbox status').each do |line|
+        if line =~ /\[([^\]]+)\] Sandbox mode is off$/
+          vm = $1
+          if config['vms_to_sandbox'].include?(vm)
+            success = system("vagrant sandbox on #{vm}")
+            failures << "#{vm} sandbox" if not sucess
+          end
+        end
+      end
+
       success = system('vagrant provision')
       if success
         # We need to commit the sandboxed VMs.
-        system("vagrant sandbox commit")
+        success = system("vagrant sandbox commit")
+        if not success
+          failures << "sandbox commit"
+        end
 
         FileUtils.touch('.vagrant_last_provisioned')
+      else
+        failures << "provision"
+      end
 
+      if failures.empty?
         n 'VM(s) provisioned', 'Vagrant', :success
         'VM(s) provisioned'
       else
-        n 'VM(s) failed provisioning', 'Vagrant', :failed
-        'VM(s) failed provisioning'
+        n 'VM(s) errors: ' + failures.join(', '), 'vagrant', :failed
+        'VM(s) errors: ' + failures.join(', ')
       end
     end
   end
