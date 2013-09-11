@@ -1,0 +1,3 @@
+module_prefix: prefix
+vms_to_sandbox:
+  - test_vm

@@ -1,11 +1,19 @@
 require "fileutils"
+require 'yaml'
 
-module_prefix = 'caess'
-vms_to_sandbox = %w{}
+config = YAML.load_file('config.yml')
+
+group :guardfile do
+  guard :shell do
+    watch(%r{^config.yml$}) do
+      ::Guard::Dsl.reevaluate_guardfile
+    end
+  end
+end
 
 group :puppet, :halt_on_fail => true do
   # Enumerate the Puppet modules and set up rspec guards for them.
-  Dir.glob("puppet-repo/modules/#{module_prefix}-*/spec/").each do |spec_path|
+  Dir.glob("puppet-repo/modules/#{config['module_prefix']}-*/spec/").each do |spec_path|
     spec_path =~ %r{^(puppet-repo/modules/[^/]+)/spec}
     mod_path = $1
 
@@ -93,7 +101,7 @@ group :puppet, :halt_on_fail => true do
       IO.open('vagrant sandbox status').each do |line|
         if line =~ /\[([^\]]+)\] Sandbox mode is off$/
           vm = $1
-          if vms_to_sandbox.include?(vm)
+          if config['vms_to_sandbox'].include?(vm)
             success = system("vagrant sandbox on #{vm}")
             failures << "#{vm} sandbox" if not sucess
           end
