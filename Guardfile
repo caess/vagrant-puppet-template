@@ -101,7 +101,7 @@ group :puppet, :halt_on_fail => true do
       end
 
       # Enabling sandboxing for sandboxed VMs.
-      IO.open('vagrant sandbox status').each do |line|
+      IO.popen('vagrant sandbox status').each do |line|
         if line =~ /\[([^\]]+)\] Sandbox mode is off$/
           vm = $1
           if config['vms_to_sandbox'].include?(vm)
