@@ -106,7 +106,7 @@ group :puppet, :halt_on_fail => true do
           vm = $1
           if config['vms_to_sandbox'].include?(vm)
             success = system("vagrant sandbox on #{vm}")
-            failures << "#{vm} sandbox" if not sucess
+            failures << "#{vm} sandbox" if not success
           end
         end
       end
